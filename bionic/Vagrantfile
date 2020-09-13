@@ -1,0 +1,15 @@
+Vagrant.configure("2") do |config|
+  
+  config.vm.box = "ubuntu/bionic64"
+  
+  config.vm.network "forwarded_port", guest: 80, host: 8089 # host irá redirecionar
+  config.vm.network "private_network", type: "dhcp" # ainda acessível apenas pelo host (host-only)
+  config.vm.network "public_network" # permite acesso pela rede empresarial, não apenas pelo host (bridge)
+
+  config.vm.provision "shell", inline: "cat /configs/id_bionic.pub >> .ssh/authorized_keys"
+
+  config.vm.synced_folder "./configs", "/configs"
+
+  config.vm.synced_folder ".", "/vagrant", disabled: true
+
+end
